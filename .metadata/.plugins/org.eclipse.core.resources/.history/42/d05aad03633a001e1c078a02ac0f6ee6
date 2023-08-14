@@ -1,0 +1,30 @@
+package edu.kh.jdbc2;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class JDBCExample2 {
+
+	public static void main(String[] args) {
+		
+		// 1단계 : JDBC 객체 참조변수 생성
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		// 2단계 : 참조변수에 알맞은 객체 대입
+		try {
+
+			Class.forName(")
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			
+		}
+		
+		
+	}
+}
