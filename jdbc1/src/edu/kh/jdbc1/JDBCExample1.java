@@ -97,7 +97,7 @@ public class JDBCExample1 {
 				int salary = rs.getInt("SALARY");
 				Date hireDate = rs.getDate("HIRE_DATE");
 				
-				System.out.printf("사번 : %s / 이름 : %s / 급여 : %d / 입사일 : %s \n", empId, empName, salary, hireDate.toString());
+				System.out.printf("사번 : %s / 이름 : %s / 급여 : %d / 입사일 : %s", empId, empName, salary, hireDate.toString());
 																								// java.sql.Date의 toString()은 yyyy-mm-dd형식으로 오버라이딩
 			}
 	
