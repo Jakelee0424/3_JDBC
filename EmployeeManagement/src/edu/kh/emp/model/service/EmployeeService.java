@@ -52,8 +52,7 @@ public class EmployeeService {
 		
 	}
 
-	/**
-	 *  사번이 일치하는 사원 정보 조회
+	/** 사번이 일치하는 사원 정보 조회 서비스
 	 * @return
 	 * @throws Exception
 	 */
@@ -70,8 +69,7 @@ public class EmployeeService {
 	
 	}
 
-	/**
-	 * 사번이 일치하는 사원 정보 수정
+	/** 사번이 일치하는 사원 정보 수정 서비스
 	 * @param emp
 	 * @return
 	 */
@@ -95,7 +93,11 @@ public class EmployeeService {
 		return result;
 	}
 
-	
+	/**사번이 일치하는 사원 정보 삭제 서비스
+	 * @param empId
+	 * @return
+	 * @throws Exception
+	 */
 	public int deleteEmployee(int empId) throws Exception{
 		
 		int result = 0;
@@ -163,7 +165,7 @@ public class EmployeeService {
 		
 	}
 
-	/**주민등록번호가 일치하는 사원 정보 조회
+	/**주민등록번호가 일치하는 사원 정보 조회 서비스
 	 * @param empNo
 	 * @return
 	 */
@@ -179,9 +181,8 @@ public class EmployeeService {
 		return emp;
 		
 	}
-
 	
-	/**직급별 급여 평균 조회
+	/**직급별 급여 평균 조회 서비스
 	 * @return
 	 */
 	public List<Employee> avgSalary() throws Exception{

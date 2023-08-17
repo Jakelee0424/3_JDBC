@@ -75,7 +75,6 @@ public class EmployeeDAO {
 		return empList;
 	}
 
-
 	/** 사원 추가 DAO
 	 * @param conn
 	 * @param emp
@@ -107,7 +106,6 @@ public class EmployeeDAO {
 		
 		return res;
 	}
-
 
 	/** 사번 일치하는 사원 조회 DAO
 	 * @param conn
@@ -152,7 +150,6 @@ public class EmployeeDAO {
 		return selectEmp;
 
 	}
-
 	
 	/** 사번 받아 정보 수정 DAO
 	 * @param conn
@@ -186,7 +183,6 @@ public class EmployeeDAO {
 		
 	}
 
-
 	/** 사번 받아 정보 삭제
 	 * @return
 	 */
@@ -207,7 +203,6 @@ public class EmployeeDAO {
 		return result;
 	}
 
-	
 	/**입력 받은 부서와 일치하는 모든 사원 정보 조회 DAO
 	 * @param conn
 	 * @param dept 
@@ -245,7 +240,6 @@ public class EmployeeDAO {
 		}
 		return empList;
 	}
-
 	
 	/**입력 받은 급여 이상을 받는 모든 사원 정보 조회 DAO
 	 * @param conn
@@ -315,8 +309,13 @@ public class EmployeeDAO {
 		}
 		return salarySum;
 	}
-
 	
+	/** 주민등록번호가 일치하는 사원 정보 조회 서비스 DAO
+	 * @param conn
+	 * @param empNo
+	 * @return
+	 * @throws Exception
+	 */
 	public Employee selectEmpNo(Connection conn, String empNo) throws Exception{
 		Employee emp = new Employee();
 		
@@ -350,7 +349,6 @@ public class EmployeeDAO {
 		
 		return emp;
 	}
-
 
 	/**직급별 급여 평균 조회 DAO
 	 * @param conn

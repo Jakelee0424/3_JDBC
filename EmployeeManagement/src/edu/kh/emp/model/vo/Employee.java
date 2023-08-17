@@ -17,7 +17,6 @@ public class Employee {
 	private String salLevel; // 급여등급
 	private double bouns; // 보너스
 	private int managementId; // 사수번호
-	private int input;
 	
 	
 	public Employee() {}
@@ -27,23 +26,23 @@ public class Employee {
 		this.departmentTitle = departmentTitle;
 		this.salary = salary;
 	}
-	
-	public Employee(int empId2, String empName2, String empNo2, String email2, String phone2, String deptCode2, String jobCode2, String salaryLevel, int salary2, double bonus, int managementId2, int input) {
+		
+	public Employee(String empName, String empNo, String email, String phone, String deptCode,
+			String jobCode, String salLevel, int salary, double bouns, int managementId, int empId) {
 		super();
-		this.empId = empId;
 		this.empName = empName;
 		this.empNo = empNo;
 		this.email = email;
 		this.phone = phone;
+		this.salary = salary;
 		this.deptCode = deptCode;
 		this.jobCode = jobCode;
 		this.salLevel = salLevel;
-		this.salary = salary;
-		this.bouns = bonus;
+		this.bouns = bouns;
 		this.managementId = managementId;
-		this.input = input;
+		this.empId = empId;
 	}
-	
+
 	public Employee(int empId) {
 		this.empId = empId;
 	}
@@ -77,6 +76,7 @@ public class Employee {
 		this.jobName = jobName;
 		this.salary = salary;
 	}
+	
 	
 
 	public int getEmpId() {
