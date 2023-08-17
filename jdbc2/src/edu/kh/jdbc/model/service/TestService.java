@@ -99,4 +99,28 @@ public class TestService {
 		return result;
 		
 	}
+
+	/** 제목, 내용 수정 Service
+	 * @param vo
+	 * @return result
+	 */
+	public int update(TestVO vo) throws Exception {
+		int result = 0;
+		
+		Connection conn = getConnection();
+		
+		int res = dao.update(conn, vo);
+		
+		
+		if(res > 0) {
+			commit(conn);
+			result = 1;
+		}else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		
+		return result;
+	}
 }

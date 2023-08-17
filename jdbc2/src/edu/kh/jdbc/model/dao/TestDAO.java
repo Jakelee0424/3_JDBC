@@ -94,4 +94,32 @@ public class TestDAO {
 
 	
 	}
+
+	/** 번호가 일치하는 행 제목, 내용 수정
+	 * @param conn
+	 * @param vo
+	 * @return res
+	 */
+	public int update(Connection conn, TestVO vo) throws Exception {
+		
+		int res = 0; // 결과 저장용 변수
+		
+		try {
+			
+			String sql = prop.getProperty("update");
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, vo.getTestTitle());
+			pstmt.setString(2, vo.getTestContent());
+			pstmt.setInt(3, vo.getTestNo());
+			
+			res = pstmt.executeUpdate();
+			
+		}finally {
+			close(pstmt);
+		}
+		
+		return res;
+	}
 }
