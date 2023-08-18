@@ -3,6 +3,7 @@ package edu.kh.emp.model.service;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static edu.kh.emp.common.JDBCTemplate.*;
 import edu.kh.emp.model.dao.EmployeeDAO;
@@ -139,7 +140,8 @@ public class EmployeeService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Employee> selectSalary(String sal) throws Exception {
+	public List<Employee> selectSalary(int sal) throws Exception {
+		
 		Connection conn = getConnection();
 		
 		List<Employee> empList = dao.selectSalary(conn, sal);
@@ -154,10 +156,11 @@ public class EmployeeService {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Employee> selectSalarySum() throws Exception {
+	public Map<String, Integer> selectDeptTotalSalary() throws Exception {
+	
 		Connection conn = getConnection();
 		
-		List<Employee> salarySum = dao.selectSalary(conn);
+		Map<String, Integer> salarySum = dao.selectDeptTotalSalary(conn);
 		
 		close(conn);		
 		
@@ -170,11 +173,10 @@ public class EmployeeService {
 	 * @return
 	 */
 	public Employee selectEmpNo(String empNo)throws Exception {
-		Employee emp = new Employee();
-		
+			
 		Connection conn = getConnection();
 		
-		emp = dao.selectEmpNo(conn, empNo);
+		Employee emp = dao.selectEmpNo(conn, empNo);
 		
 		close(conn);
 		
@@ -185,10 +187,10 @@ public class EmployeeService {
 	/**직급별 급여 평균 조회 서비스
 	 * @return
 	 */
-	public List<Employee> avgSalary() throws Exception{
+	public Map<String, Integer> avgSalary() throws Exception{
 		Connection conn = getConnection();
 		
-		List<Employee> avgSalary = dao.avgSalary(conn);
+		Map<String, Integer> avgSalary = dao.avgSalary(conn);
 		
 		close(conn);		
 		

@@ -7,7 +7,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import static edu.kh.emp.common.JDBCTemplate.*;
@@ -209,6 +212,7 @@ public class EmployeeDAO {
 	 * @return
 	 */
 	public List<Employee> selectDept(Connection conn, String dept) throws Exception {
+	
 		List<Employee> empList = new ArrayList<Employee>();
 		
 		try {
@@ -227,11 +231,11 @@ public class EmployeeDAO {
 				String empNo = rs.getString("EMP_NO");
 				String email = rs.getString("EMAIL");
 				String phone = rs.getString("PHONE");
-				String departmentTitle = rs.getString("DEPT_TITLE");
+//				String departmentTitle = rs.getString("DEPT_TITLE");
 				String jobName = rs.getString("JOB_NAME");
 				int salary = rs.getInt("SALARY");
 
-				empList.add(new Employee(empId, empName, empNo, email, phone, departmentTitle, jobName, salary) );
+				empList.add(new Employee(empId, empName, empNo, email, phone, dept, jobName, salary) );
 
 			}
 		
@@ -247,7 +251,8 @@ public class EmployeeDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Employee> selectSalary(Connection conn, String sal) throws Exception{
+	public List<Employee> selectSalary(Connection conn, int sal) throws Exception{
+		
 		List<Employee> empList = new ArrayList<Employee>();
 		
 		try {
@@ -256,7 +261,7 @@ public class EmployeeDAO {
 
 			pstmt = conn.prepareStatement(sql);
 
-			pstmt.setString(1, sal);
+			pstmt.setInt(1, sal);
 
 			rs = pstmt.executeQuery();
 
@@ -285,8 +290,12 @@ public class EmployeeDAO {
 	 * @param conn
 	 * @return
 	 */
-	public List<Employee> selectSalary(Connection conn) throws Exception{
-		List<Employee> salarySum = new ArrayList<Employee>();
+	public Map<String, Integer> selectDeptTotalSalary(Connection conn) throws Exception{
+		
+		Map<String, Integer> salarySum = new LinkedHashMap<String, Integer>();
+		
+		//LinkedHashMap : 정렬 결과 유지 
+		
 		
 		try {
 
@@ -297,10 +306,10 @@ public class EmployeeDAO {
 			rs = stmt.executeQuery(sql);
 
 			while(rs.next()) {
-				String departmentTitle = rs.getString("DEPT_TITLE");
+				String departmentCode = rs.getString("DEPT_CODE");
 				int salary = rs.getInt("SUM(SALARY)");
 
-				salarySum.add(new Employee(departmentTitle, salary));
+				salarySum.put(departmentCode, salary);
 
 			}
 		
@@ -317,7 +326,8 @@ public class EmployeeDAO {
 	 * @throws Exception
 	 */
 	public Employee selectEmpNo(Connection conn, String empNo) throws Exception{
-		Employee emp = new Employee();
+		
+		Employee emp = null;
 		
 		try {
 			String sql = prop.getProperty("selsectEmpNo");
@@ -355,8 +365,9 @@ public class EmployeeDAO {
 	 * @return
 	 * @throws Exception
 	 */
-	public List<Employee> avgSalary(Connection conn)throws Exception {
-		List<Employee> avgSalary = new ArrayList<Employee>();
+	public Map<String, Integer> avgSalary(Connection conn)throws Exception {
+		
+		Map<String, Integer> avgSalary = new HashMap<String, Integer>();
 		
 		try {
 
@@ -370,7 +381,7 @@ public class EmployeeDAO {
 				String jobName = rs.getString("JOB_NAME");
 				int salary = rs.getInt("SALARY");
 
-				avgSalary.add(new Employee(jobName, salary));
+				avgSalary.put(jobName, salary);
 			}
 		
 		}finally {

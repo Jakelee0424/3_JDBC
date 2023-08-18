@@ -5,6 +5,7 @@ import static edu.kh.emp.common.JDBCTemplate.rollback;
 
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import edu.kh.emp.model.vo.Employee;
@@ -58,7 +59,7 @@ public class EmployeeView {
 				case 5: deleteEmployee();   break;
 				case 6: selectDept();   break;
 				case 7: selectSalary();   break;
-				case 8: selectSalarySum();   break;
+				case 8: selectDeptTotalSalary();   break;
 				case 9: selsectEmpNo();   break;
 				case 10: avgSalary();   break;
 				case 0: System.out.println("프로그램을 종료합니다...");   break;
@@ -329,7 +330,7 @@ public class EmployeeView {
 			System.out.println("<입력한 급여보다 높은 급여를 받는 사원 정보 조회>");
 
 			System.out.print("급여 정보를 입력하세요 >> ");
-			String sal = sc.nextLine();
+			int sal = sc.nextInt();
 			
 			List<Employee> emplist = service.selectSalary(sal);
 			
@@ -339,17 +340,38 @@ public class EmployeeView {
 		/**
 		 * 부서별 급여 합 전체 조회
 		 */
-		private void selectSalarySum() throws Exception{
+		private void selectDeptTotalSalary() throws Exception{
+			
 			System.out.println("<부서별 급여 합 조회>");
 
-			List<Employee> salarySum = service.selectSalarySum();
+			Map<String, Integer> salarySum = service.selectDeptTotalSalary();
 					
-			for(Employee emp : salarySum) {
-				System.out.printf("부서 : %s / 급여합 : %d \n", emp.getDepartmentTitle(), emp.getSalary());
-			}
-			
+			System.out.println("1. 부서 전체 출력");
+			System.out.println("2. 입력한 부서의 급여 합 출력");
+			System.out.print("번호 입력 >> ");
+			int Num = sc.nextInt();
+						
+			if(Num == 2) {
 
-			
+				System.out.print("부서 코드를 입력하세요 >> ");
+				String deptCode = sc.next();
+
+				if(salarySum.get(deptCode) != null) {
+					System.out.println("해당 부서의 급여합은 " + salarySum.get(deptCode) + "원 입니다.");
+				} else {
+					System.out.println("부서 코드를 잘못 입력하셨습니다.");
+				}
+
+			} else if (Num == 1) {
+				
+				for(String sal : salarySum.keySet()) {
+					System.out.println(sal + " : " + salarySum.get(sal));
+					
+				}
+				
+			} else {
+				System.out.println("잘못 입력하셨습니다.");
+			}
 		}
 
 		/**주민등록번호가 일치하는 사원 정보 조회
@@ -361,9 +383,7 @@ public class EmployeeView {
 			System.out.print("주민등록번호 입력 >> ");
 			String empNo = sc.nextLine();
 			
-			Employee emp = new Employee();
-			
-			emp = service.selectEmpNo(empNo);
+			Employee emp = service.selectEmpNo(empNo);
 			
 			printOne(emp);
 		
@@ -378,10 +398,15 @@ public class EmployeeView {
 		private void avgSalary() throws Exception {
 			System.out.println("<직급별 급여 평균 조회>");
 
-			List<Employee> avgSalary = service.avgSalary();
-					
-			for(Employee emp : avgSalary) {
-				System.out.printf("직급명 : %s / 급여평균 : %d \n", emp.getDepartmentTitle(), emp.getSalary());
+			Map<String, Integer> avgSalary = service.avgSalary();
+			
+			System.out.print("조회를 원하는 직급을 입력하세요 >> ");
+			String jobName = sc.next();
+			
+			if(avgSalary.get(jobName) != null) {
+				System.out.println("해당 직급의 급여평균은 " + avgSalary.get(jobName) + "원 입니다.");
+			} else {
+				System.out.println("부서 코드를 잘못 입력하셨습니다.");
 			}
 			
 

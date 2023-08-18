@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>member-sql</comment>
+
+	<entry key="selectInfo">
+SELECT MEMBER_NO, MEMBER_ID, MEMBER_NM, MEMBER_GENDER, ENROLL_DT 
+FROM MEMBER
+WHERE MEMBER_PW = ?
+	</entry>
+
+</properties>
