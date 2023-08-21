@@ -7,6 +7,25 @@
 SELECT MEMBER_NO, MEMBER_ID, MEMBER_NM, MEMBER_GENDER, ENROLL_DT 
 FROM MEMBER
 WHERE MEMBER_PW = ?
+AND MEMBER_NM = ?
+	</entry>
+
+	<entry key="updateInfo">
+UPDATE MEMBER 
+SET MEMBER_NM = ?,
+MEMBER_GENDER = ?
+WHERE MEMBER_PW = ?
+	</entry>
+
+	<entry key="selectAllInfo">
+SELECT MEMBER_NO, MEMBER_ID, MEMBER_NM, MEMBER_GENDER, ENROLL_DT
+FROM MEMBER
+	</entry>
+
+	<entry key="updatePw">
+UPDATE MEMBER
+SET MEMBER_PW = ?
+WHERE MEMBER_NO = ?
 	</entry>
 
 </properties>

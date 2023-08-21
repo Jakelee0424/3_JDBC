@@ -4,7 +4,6 @@
     <fullyQualifiedTypeName name="java.lang.ClassNotFoundException"/>
     <fullyQualifiedTypeName name="java.sql.Date"/>
     <fullyQualifiedTypeName name="java.util.Date"/>
-    <fullyQualifiedTypeName name="java.util.Random"/>
     <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc3.model.vo.Emp"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc3.model.vo.Employee"/>
@@ -24,9 +23,7 @@
     <fullyQualifiedTypeName name="edu.kh.emp.model.dao.EmployeeDAO"/>
     <fullyQualifiedTypeName name="java.sql.SQLException"/>
     <fullyQualifiedTypeName name="edu.kh.emp.common.JDBCTemplate"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="edu.kh.emp.view.EmployeeView"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="edu.kh.emp.model.vo.Employee"/>
     <fullyQualifiedTypeName name="java.util.Map"/>
     <fullyQualifiedTypeName name="java.util.HashMap"/>
@@ -50,8 +47,11 @@
     <fullyQualifiedTypeName name="edu.kh.jdbc.member.view.Memberview"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.main.view.MainView"/>
     <fullyQualifiedTypeName name="java.sql.Connection"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.member.model.service.MemberService"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.member.model.dao.MemberDAO"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.member.model.dto.Member"/>
+    <fullyQualifiedTypeName name="java.util.Random"/>
     <fullyQualifiedTypeName name="java.lang.Exception"/>
-    <fullyQualifiedTypeName name="edu.kh.jdbc.member.model.service.MemberService"/>
 </qualifiedTypeNameHistroy>

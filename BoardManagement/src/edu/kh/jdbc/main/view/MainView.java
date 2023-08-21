@@ -196,4 +196,7 @@ public class MainView {
 			System.out.println("회원가입에 실패하였습니다.");
 		}
 	}
+
 }
+
+
