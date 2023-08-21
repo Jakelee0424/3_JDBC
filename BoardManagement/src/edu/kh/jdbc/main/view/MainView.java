@@ -184,11 +184,6 @@ public class MainView {
 
 		member.setMemberGender(gender);
 
-		System.out.println(member.getMemName());
-		System.out.println(member.getMemberPw());
-		System.out.println(member.getMemberId());
-		System.out.println(member.getMemberGender());
-		
 		result = service.signUp(member);
 		
 		if(result > 0) {

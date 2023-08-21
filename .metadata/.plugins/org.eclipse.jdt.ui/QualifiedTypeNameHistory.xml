@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="java.security.DomainCombiner"/>
-    <fullyQualifiedTypeName name="java.lang.ClassNotFoundException"/>
     <fullyQualifiedTypeName name="java.sql.Date"/>
     <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
@@ -32,8 +30,6 @@
     <fullyQualifiedTypeName name="edu.kh.board.common.JDBCTemplate"/>
     <fullyQualifiedTypeName name="edu.kh.board.model.service.BoardService"/>
     <fullyQualifiedTypeName name="edu.kh.board.model.vo.Member"/>
-    <fullyQualifiedTypeName name="java.util.Scanner"/>
-    <fullyQualifiedTypeName name="edu.kh.jdbc.common.Session"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.main.model.service.MainService"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.common.JDBCTemplate"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.board.common.JDBCTemplate"/>
@@ -45,13 +41,23 @@
     <fullyQualifiedTypeName name="java.util.Properties"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.main.model.dao.MainDAO"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.member.view.Memberview"/>
-    <fullyQualifiedTypeName name="edu.kh.jdbc.main.view.MainView"/>
-    <fullyQualifiedTypeName name="java.sql.Connection"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.member.model.service.MemberService"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.member.model.dao.MemberDAO"/>
-    <fullyQualifiedTypeName name="java.util.Random"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.member.model.dto.Member"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.main.view.MainView"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="java.util.Random"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.board.view.CommentView"/>
+    <fullyQualifiedTypeName name="java.util.Scanner"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.board.model.dto.Comment"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.board.view.BoardView"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.board.model.dto.Board"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.board.model.service.BoardService"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.board.model.dao.CommentDAO"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.common.Session"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.board.model.service.CommentService"/>
+    <fullyQualifiedTypeName name="java.sql.Connection"/>
     <fullyQualifiedTypeName name="java.lang.Exception"/>
 </qualifiedTypeNameHistroy>
