@@ -81,7 +81,6 @@ public class MemberDAO {
 		return member;
 	}
 
-
 	/** 개인정보 수정 DAO
 	 * @param conn
 	 * @param pw
@@ -93,12 +92,10 @@ public class MemberDAO {
 	public int updateInfo(Connection conn, String pw, String updateName, String updateGender) throws Exception{
 		
 		int result = 0;
-		System.out.println(result);
 		
 		try {
 			
 			String sql = prop.getProperty("updateInfo");
-			System.out.println(sql);
 			pstmt = conn.prepareStatement(sql);
 
 			pstmt.setString(1, updateName);
@@ -106,7 +103,6 @@ public class MemberDAO {
 			pstmt.setString(3, pw);
 
 			result = pstmt.executeUpdate();
-			System.out.println(result);
 			
 		}finally {
 			close(pstmt);
@@ -114,7 +110,6 @@ public class MemberDAO {
 		
 		return result;
 	}
-
 
 	/** 회원 목록 조회 DAO
 	 * @param conn
@@ -152,9 +147,6 @@ public class MemberDAO {
 		return list;
 	}
 
-
-
-	
 	/** 비밀번호 변경 DAO
 	 * @param conn
 	 * @param updatePw
@@ -175,6 +167,34 @@ public class MemberDAO {
 
 			result = pstmt.executeUpdate();
 			
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+
+	
+	
+	/** 회원 탈퇴 서비스
+	 * @param conn
+	 * @param memNo
+	 * @return
+	 */
+	public int deleteInfo(Connection conn, int memNo) throws Exception{
+		
+		int result = 0;
+		
+		try {
+			String sql = prop.getProperty("deleteInfo");
+
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setString(1, "Y");
+			pstmt.setInt(2, memNo);
+
+			result = pstmt.executeUpdate();
+
 		}finally {
 			close(pstmt);
 		}

@@ -66,4 +66,21 @@ public class MainService {
 		return result;
 	}
 
+
+	/** 로그인을 위한 탈퇴여부 체크 서비스
+	 * @return
+	 */
+	public Member checkYN(String id, String pw) throws Exception {
+		
+		Member member = new Member();
+		
+		Connection conn = getConnection();
+		
+		member = dao.checkYN(conn, id, pw);
+		
+		close(conn);
+		
+		return member;
+	}
+
 }

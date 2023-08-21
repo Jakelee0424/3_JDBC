@@ -51,7 +51,7 @@
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="edu.kh.jdbc.member.model.dao.MemberDAO"/>
-    <fullyQualifiedTypeName name="edu.kh.jdbc.member.model.dto.Member"/>
     <fullyQualifiedTypeName name="java.util.Random"/>
+    <fullyQualifiedTypeName name="edu.kh.jdbc.member.model.dto.Member"/>
     <fullyQualifiedTypeName name="java.lang.Exception"/>
 </qualifiedTypeNameHistroy>

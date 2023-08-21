@@ -22,9 +22,17 @@ WHERE MEMBER_ID = ?
 	</entry>
 	
 	<!-- 회원 가입(DB 입력) -->
-	<entry key="signUP">
+	<entry key="signUp">
 INSERT INTO MEMBER VALUES
 (SEQ_MEMBER_NO.NEXTVAL, ?, ?, ?, ?, DEFAULT, DEFAULT)	
+	</entry>
+
+	<!-- 로그인을 위한 탈퇴여부 체크 -->
+	<entry key="checkYN">
+SELECT MEMBER_NO, MEMBER_ID, MEMBER_PW, UNREGISTER_FL
+FROM MEMBER
+WHERE MEMBER_ID = ?
+AND MEMBER_PW = ?
 	</entry>
 
 

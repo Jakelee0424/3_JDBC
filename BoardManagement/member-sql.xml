@@ -28,4 +28,12 @@ SET MEMBER_PW = ?
 WHERE MEMBER_NO = ?
 	</entry>
 
+	<entry key="deleteInfo">
+UPDATE MEMBER
+SET UNREGISTER_FL = ?
+WHERE MEMBER_NO = ?
+	</entry>
+
+
+
 </properties>

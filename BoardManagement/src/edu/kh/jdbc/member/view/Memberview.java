@@ -16,7 +16,7 @@ public class Memberview {
 	
 	private Scanner sc = new Scanner(System.in);
 	MemberService service = new MemberService();
-
+	
 	public void mainMenu() {
 
 		int input = 0;
@@ -48,7 +48,8 @@ public class Memberview {
 				case 2: updateInfo(); break;
 				case 3: selectAllInfo(); break;
 				case 4: updatePw(); break;
-				case 9: System.out.println("\n---------------- 프로그램을 종료합니다 -----------------\n"); break;
+				case 5: deleteInfo(); break;
+				case 9: return; 
 				case 0: System.out.println("\n---------------- 프로그램을 종료합니다 -----------------\n"); break;
 				default: System.out.println("\n메뉴에 존재하는 번호만 입력하세요.\n");
 
@@ -64,11 +65,12 @@ public class Memberview {
 	}
 
 
+
 	/** 개인정보 조회
 	 * @throws Exception
 	 */
 	private void selectInfo() throws Exception{
-		System.out.println("\n----------------개인 정보 조회-----------------\n");
+		System.out.println("\n----------------[ 개인 정보 조회 ]-----------------\n");
 		Member member = new Member();		
 		
 		System.out.println("비밀번호를 입력하세요");
@@ -85,7 +87,7 @@ public class Memberview {
 	 * 개인 정보 수정
 	 */
 	private void updateInfo() throws Exception{
-		System.out.println("\n----------------개인 정보 수정-----------------\n");
+		System.out.println("\n----------------[ 개인 정보 수정 ]-----------------\n");
 		Member member = new Member();
 		
 		System.out.println("비밀번호를 입력하세요");
@@ -108,13 +110,16 @@ public class Memberview {
 			String updateGender = sc.next();
 			
 			sc.nextLine();
-			
-//			System.out.println(updateGender);
 
 			result = service.updateInfo(pw, updateName, updateGender);
 
 			if (result > 0 ) {
 				System.out.println("수정이 완료되었습니다.");
+				
+				// DB와 JAVA 프로그램 데이터 동기화 필요
+				Session.loginMember.setMemName(updateGender);
+				Session.loginMember.setMemberGender(updateGender);
+				
 			} else {
 				System.out.println("수정에 실패했습니다.");
 			}
@@ -126,7 +131,7 @@ public class Memberview {
 	 * 회원 목록 조회
 	 */
 	private void selectAllInfo() throws Exception{
-		System.out.println("\n----------------회원 목록 조회-----------------\n");
+		System.out.println("\n----------------[ 회원 목록 조회 ]-----------------");
 		
 		List<Member> list = new ArrayList<Member>();
 		
@@ -141,6 +146,7 @@ public class Memberview {
 	 * 비밀번호 변경
 	 */
 	private void updatePw() throws Exception{
+		System.out.println("\n----------------[ 비밀번호 변경 ]-----------------\n");
 		
 		Member member = new Member();		
 		Random random = new Random();
@@ -162,18 +168,27 @@ public class Memberview {
 			System.out.print("보안 문자 입력 >> ");
 			int numCheck = sc.nextInt();
 		
+			sc.nextLine();
+			
 			if(numCheck == randomNum) {
 				
 				System.out.println("수정할 비밀번호를 입력하세요");
 				System.out.print("비밀번호 입력 >> ");
 				String updatePw = sc.nextLine();
 				
-				result = service.updatePw(memNo, updatePw);
+				System.out.print("비밀번호 확인 >> ");
+				String updatePw2 = sc.nextLine();
+				
+				if(updatePw.equals(updatePw2)) {
+				
+					result = service.updatePw(memNo, updatePw);
 
-				if(result > 0) {
-					System.out.println("비밀번호가 수정되었습니다.");
-				} else {
-					System.out.println("비밀먼호 수정이 실패하였습니다.");
+					if(result > 0) {
+						System.out.println("비밀번호가 수정되었습니다.");
+					} else {
+						System.out.println("비밀먼호 수정이 실패하였습니다.");
+					}
+					
 				}
 			}else {
 				System.out.println("보안문자를 잘못 입력하셨습니다.");
@@ -181,6 +196,51 @@ public class Memberview {
 		}
 	}
 	
+	/**
+	 * 회원 탈퇴
+	 */
+	private void deleteInfo() throws Exception {
+		
+		System.out.println("\n----------------[ 회원 탈퇴 ]-----------------\n");
+		Member member = new Member();		
+		Random random = new Random();
+		int result = 0;
+		int memNo = Session.loginMember.getMemberNo();
+		int randomNum = random.nextInt(899999) + 100000;
+		
+		System.out.println("비밀번호를 입력하세요");
+		System.out.print("비밀번호 입력 >> ");
+		String pw = sc.nextLine();
+
+		member = service.selectInfo(Session.loginMember.getMemName(), pw);
+
+		if(member == null) {
+			System.out.println("비밀번호를 잘못 입력하셨습니다.");
+		} else {
+			
+			System.out.println("보안문자 [ " + randomNum + " ]");
+			System.out.print("보안 문자 입력 >> ");
+			int numCheck = sc.nextInt();
+		
+			sc.nextLine();
+			
+			if(numCheck == randomNum) {
+				
+				System.out.println("정말 회원 탈퇴 하시겠습니까? [Y/N] >>");
+				char yesOrNo = sc.next().toUpperCase().charAt(0);
+				
+				if (yesOrNo == 'Y') {
+					result = service.deleteInfo(memNo);
+				} else {
+					System.out.println("회원 탈퇴를 종료합니다");
+				}
+
+			}else {
+				System.out.println("보안문자를 잘못 입력하셨습니다.");
+			}
+		}
+		
+	}
 
 // 보조메서드
 	
@@ -188,13 +248,14 @@ public class Memberview {
 	 * 전달받은 List 모두 출력 
 	 */
 	public void printAll(List<Member> memList) {
+
 		
 		if(memList.isEmpty()) {
 			System.out.println("조회된 회원 정보가 없습니다.");
 			
 		} else {
-			System.out.println("\n 회원번호 |   아이디  |   이름   |   성별   |    가입일   " );
-			System.out.println("------------------------------------------------------------------------------------------------");
+			System.out.println("\n\n 회원번호 |   아이디  |   이름   |   성별   |    가입일   " );
+			System.out.println("--------------------------------------------------------------------------------------");
 
 			for(Member mem : memList) { 
 				System.out.printf(" %7d  | %9s | %5s | %8s | %20s \n\n",
@@ -213,12 +274,13 @@ public class Memberview {
 			System.out.println("조회된 회원 정보가 없습니다.");
 
 		} else {
-			System.out.println("\n 회원번호 |   아이디  |   이름   |   성별   |    가입일   " );
-			System.out.println("------------------------------------------------------------------------------------------------");
+			System.out.println("\n\n 회원번호 |   아이디  |   이름   |   성별   |    가입일   " );
+			System.out.println("--------------------------------------------------------------------------------------");
 
-			System.out.printf(" %7d  | %9s | %5s | %8s | %20s \n",
+			System.out.printf(" %7d  | %9s | %5s | %8s | %20s \n\n",
 			mem.getMemberNo(), mem.getMemberId(), mem.getMemName(), mem.getMemberGender(), mem.getEnrollDate());
 		}
 
 	}
+
 }

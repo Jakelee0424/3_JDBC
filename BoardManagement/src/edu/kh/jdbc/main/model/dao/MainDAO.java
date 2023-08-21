@@ -114,6 +114,7 @@ public class MainDAO {
 	 * @return
 	 */
 	public int signUp(Connection conn, Member member) throws Exception{
+		
 		int result = 0;
 		
 		try {
@@ -133,6 +134,51 @@ public class MainDAO {
 			close(pstmt);
 		}
 		return result;
+	}
+
+	/** 로그인을 위한 탈퇴여부 체크 DAO
+	 * @param conn
+	 * @param id
+	 * @param pw
+	 * @return
+	 * @throws Exception
+	 */
+	public Member checkYN(Connection conn, String id, String pw) throws Exception{
+		
+		Member member = new Member();
+		
+		try {
+			
+			String sql = prop.getProperty("checkYN");
+			
+			pstmt = conn.prepareStatement(sql);
+			
+					
+			pstmt.setString(1, id);
+			pstmt.setString(2, pw);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				int memberNo = rs.getInt("MEMBER_NO");
+				String memberId = rs.getString("MEMBER_ID");
+				String memberPw = rs.getString("MEMBER_ID");
+				String unregisterFlag = rs.getString("UNREGISTER_FL"); 
+				
+				member = new Member();
+				member.setMemberNo(memberNo);
+				member.setMemberId(memberId);
+				member.setMemberPw(memberPw);
+				member.setUnregisterFlag(unregisterFlag);
+				
+			}
+			
+		}finally {
+			close(rs);
+			close(pstmt);
+		}
+		
+		return member;
 	}
 
 }

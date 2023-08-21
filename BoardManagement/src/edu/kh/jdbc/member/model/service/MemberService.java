@@ -94,6 +94,32 @@ public class MemberService {
 	}
 
 
+	
+	
+	/** 회원 탈퇴 서비스
+	 * @param memNo
+	 * @return
+	 */
+	public int deleteInfo(int memNo) throws Exception {
+
+		int result = 0;
+		
+		Connection conn = getConnection();
+		
+		result = dao.deleteInfo(conn, memNo);
+		
+		if(result > 0) {
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		
+		return result;
+	}
+
+
 
 	
 	

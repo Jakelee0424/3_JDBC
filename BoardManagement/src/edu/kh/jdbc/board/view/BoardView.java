@@ -1,51 +1,59 @@
 package edu.kh.jdbc.board.view;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
+import edu.kh.jdbc.board.model.dto.Board;
 import edu.kh.jdbc.board.model.service.BoardService;
+import edu.kh.jdbc.common.Session;
+import edu.kh.jdbc.member.model.dto.Member;
 
 public class BoardView {
 
-	Scanner sc = new Scanner(System.in);
+	private Scanner sc = new Scanner(System.in);
+	private BoardService service = new BoardService();
+	private Random random = new Random();
 	
 	public void displayMenu() {
 	
-		
-		
-		
 		int input = 0;
 		
 		do {
 			try {
 				System.out.println("---------------------------------------------------------");
-				System.out.println("-                 게시판 관리 프로그램                  -");
+				System.out.println("|                      게시판 관리                       |");
 				System.out.println("---------------------------------------------------------");
-				System.out.println("1. 로그인");
-				System.out.println("2. 회원가입");
-				System.out.println("---------------------------------------------------------");
+				System.out.println("1. 게시글 조회");
+				System.out.println("2. 게시글 작성");
+				System.out.println("3. 게시글 수정");
+				System.out.println("4. 게시글 삭제");
+//				System.out.println("5. 게시글 별 댓글 조회");
+				System.out.println();
+				System.out.println("9. 이전 메뉴");
 				System.out.println("0. 프로그램 종료");
-				System.out.println("---------------------------------------------------------");
 				
-				System.out.print("메뉴 선택 >> ");
+				System.out.print("\n[ 메뉴 선택 ] >> ");
 				input = sc.nextInt();
 				sc.nextLine(); 
 				
 				System.out.println();				
 				
 				switch(input) {
-				case 1: login();   break;
-				case 2: signIn();  break;
-//				case 3: selectEmpId();   break;
-//				case 4: updateEmployee();   break;
+				case 1: selectBoard();   break;
+				case 2: insertBoard();  break;
+				case 3: updateBoard();   break;
+				case 4: deleteBoard();   break;
 //				case 5: deleteEmployee();   break;
 //				case 6: selectDept();   break;
 //				case 7: selectSalary();   break;
 //				case 8: selectDeptTotalSalary();   break;
-//				case 9: selsectEmpNo();   break;
-//				case 10: avgSalary();   break;
-				case 0: System.out.println("프로그램을 종료합니다...");   break;
+				case 9: return; 
+				case 0: System.out.println("프로그램을 종료합니다...");   
+						System.exit(0); // JVM 강제 종료 구문
+						break;
 				default: System.out.println("메뉴에 존재하는 번호만 입력하세요.");
 				}
 				
@@ -59,87 +67,206 @@ public class BoardView {
 				e.printStackTrace();
 			}
 			
-			
-			
-			
 		}while(input != 0);
 		
 	}
 	
-	/**
-	 * 로그인 
+
+
+	/** 게시글 전체 조회
+	 * @throws Exception
 	 */
-	private void login() throws Exception {
-	
-		System.out.println("\n< 로그인 >");
+	private void selectBoard() throws Exception {
 		
-		System.out.print("아이디 : ");
-		String id = sc.nextLine();
+		List<Board> list = new ArrayList<Board>();
+		int memNo = Session.loginMember.getMemberNo();
 		
-		System.out.print("비밀번호 : ");
-		String pw = sc.nextLine();
+		System.out.println("----------------------- [게시글 조회] -----------------------");
+		System.out.println("1. 전체 게시글 조회");
+		System.out.println("2. 작성자별 게시글 조회");
+		System.out.println("3. 내가 쓴 게시글 조회");
+		System.out.println();
+		System.out.print("번호 입력 >> ");
+		int selectNum = sc.nextInt();
+		sc.nextLine();
 		
-////		Member mem = new Member();
-//		mem.setMemberId(id);
-//		mem.setMemberPw(pw);
-//		
-//		mem = BoardService.login(mem);
-//		
+		switch(selectNum) {
+		
+		case 1: list = service.selectBoard();
+				printAll(list);
+				break;
+		case 2: System.out.print("작성자 아이디 입력 >> ");
+				String selectId = sc.nextLine();
+				list = service.selectMyBoard(selectId);
+				printAll(list);
+				break;
+		case 3: list = service.selectMyBoard2(memNo);
+				printAll(list);
+				break;
+		default : System.out.println("잘못 입력하셨습니다.");
+		}
+		
+		
+		
 	}
-	
 
-	private void signIn() {
+
+	/** 게시글 작성
+	 * 
+	 */
+	private void insertBoard() throws Exception {
+		System.out.println("----------------------- [게시글 작성] -----------------------");
+
+		int result = 0;
+		int idNum = Session.loginMember.getMemberNo();
+		
+		System.out.print("게시글 제목 : ");
+		String title = sc.nextLine();
+		
+		System.out.println("게시글 내용 작성 :");
+		String content = sc.nextLine();
+		
+		result = service.insertBoard(title, content, idNum);
+		
+		if (result > 0) {
+			System.out.println("게시글 작성이 완료되었습니다.");
+		} else {
+			System.out.println("게시글 작성에 실패하였습니다.");
+		}
+		
+	}
+	
+	
+	/**
+	 *  게시글 수정
+	 */
+	private void updateBoard() throws Exception{
+		
+		int result = 0;
+		int idNum = Session.loginMember.getMemberNo();
+		List<Board> list = new ArrayList<Board>();
+		
+		System.out.println("-----------------------[ 게시글 수정 ]-----------------------");
+
+		list = service.selectMyBoard2(idNum);
+		printAll(list);
+		
+		System.out.println("수정을 원하는 글의 번호를 입력하세요 ");
+		System.out.print("번호 입력(이전메뉴는 0) >> ");
+		int boardNum = sc.nextInt();
+		sc.nextLine();
+		
+		if(boardNum == 0) {
+			return;			
+		} else {
+			
+			System.out.print("게시글 제목 :");
+			String updateTitle = sc.nextLine();
+			
+			System.out.print("게시글:");
+			String updateContent = sc.nextLine();
+			
+			result = service.updateBoard(boardNum, updateTitle, updateContent);
+			
+			if(result > 0 ) {
+				System.out.println("게시글 수정이 완료되었습니다.");
+			}else {
+				System.out.println("게시글 수정이 취소되었습니다.");
+			}
+			
+		}
+		
+		
 		
 		
 	}
 
-	
-	private void displatMenuAfterLogin() {
+
+	/**
+	 * 게시글 삭제
+	 */
+	private void deleteBoard() throws Exception{
 		
+		int result = 0;
+		int idNum = Session.loginMember.getMemberNo();
+		int checkNum = 0;
+		List<Board> list = new ArrayList<Board>();
+		
+		System.out.println("-----------------------[ 게시글 삭제 ]-----------------------");
+
+		list = service.selectMyBoard2(idNum);
+		printAll(list);
+		
+		System.out.println("삭제를 원하는 글의 번호를 입력하세요");
+		System.out.print("번호 입력(뒤로가기 0번) >>");
+		int boardNum = sc.nextInt();
+		sc.nextLine();
+		
+		if(boardNum == 0) {
+			return;			
+		} else {
+			checkNum = random.nextInt(899999) + 100000;
+			System.out.println("보안문자 [ " + checkNum + " ]");
+			System.out.print("보안 문자 입력 >> "); 
+			int doubleCheckNum = sc.nextInt();
+			
+			if (checkNum == doubleCheckNum) {
+				result = service.deleteBoard(boardNum);
+				
+				if(result>0) {
+					System.out.println("게시글 삭제가 완료되었습니다.");
+				} else {
+					System.out.println("게시글 삭제에 실패했습니다.");
+				}
+			}
+			
+			
+			
+		}
 	}
+
+	
+// 보조 메서드
+	
+	/**
+	 * 전달받은 List 모두 출력 
+	 */
+	public void printAll(List<Board> borList) {
+
+
+		if(borList.isEmpty()) {
+			System.out.println("조회된 게시글 정보가 없습니다.");
+
+		} else {
+			System.out.println("\n\n 글 번호 |        글 제목        |            글 내용            |        작성일       |  작성자   " );
+			System.out.println("---------------------------------------------------------------------------------------------------------");
+
+			for(Board bor : borList) { 
+				System.out.printf(" %6d  | %-10s\t | %-15s\t | %10s | %3s \n\n",
+						bor.getBoardNo(),bor.getBoardTitle(),bor.getBoardContent(),bor.getCreateDate(),bor.getMemberNo());
+			}
+		}	
+		return;
+	}
+
+	/** 전달받은 게시글 한 개 출력
+	 * @param mem
+	 */
+	public void printOne(Board bor) {
+
+		if(bor == null) {
+			System.out.println("조회된 게시글 정보가 없습니다.");
+
+		} else {
+			System.out.println("\n\n 글 번호 |     글 제목     |          글 내용          |        작성일       |  작성자   " );
+			System.out.println("--------------------------------------------------------------------------------------");
+
+			System.out.printf(" %6d  | %11s | %15s | %8s | %3s \n\n",
+					bor.getBoardNo(),bor.getBoardTitle(),bor.getBoardContent(),bor.getCreateDate(),bor.getMemberNo());
+		}
+
+	}
+
 }
-	/**
-	 * 전달받은 사원 List 모두 출력 
-	 */
-//	public void printAll(List<Member> memList) {
-//		
-//		if(memList.isEmpty()) {
-//			System.out.println("조회된 회원 정보가 없습니다.");
-//			
-//		} else {
-//			System.out.println("회원번호 |   아이디  | 이름 |  성별 " );
-//			System.out.println("------------------------------------------------------------------------------------------------");
-//			for(Member mem : memList) { 
-//				System.out.printf(" %2d  | %4s | %s | %20s | %s | %s | %s | %d\n",
-//						mem.getMemberNo(), mem.getMemberId(), mem.getMemName(), mem.getMemberGender();
-//			}
-//		}	
-//		return;
-//	}
-//
-//	
-//	/** 사원 한명 출력
-//	 * @param emp
-//	 */
-//	public void printOne(Employee emp) {
-//
-//		if(emp == null) {
-//			System.out.println("조회된 사원 정보가 없습니다.");
-//			
-//		} else {
-//			System.out.println("사번 |   이름  | 주민 등록 번호 |        이메일        |   전화 번호   | 부서 | 직책 | 급여" );
-//			System.out.println("------------------------------------------------------------------------------------------------");
-//			
-//			System.out.printf(" %2d  | %4s | %s | %20s | %s | %s | %s | %d\n",
-//					emp.getEmpId(), emp.getEmpName(), emp.getEmpNo(), emp.getEmail(), 
-//					emp.getPhone(), emp.getDepartmentTitle(), emp.getJobName(), emp.getSalary());
-//		}
-//		
-//	}
-//
-//
-//	/** 사번을 입력받아 반환하는 메서드
-//	 * @return
-//	 */
-//	public int inputEmpId() {
-//}
+
+
