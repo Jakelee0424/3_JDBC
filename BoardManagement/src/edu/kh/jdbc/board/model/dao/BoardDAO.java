@@ -56,9 +56,11 @@ public class BoardDAO {
 				String boardTitle = rs.getString("BOARD_TITLE");
 				String boardContent = rs.getString("BOARD_CONTENT");
 				String createDate = rs.getString("CREATE_DT");
-				int memberNo = rs.getInt("MEMBER_NO");
-
-				list.add( new Board(boardNo, boardTitle, boardContent, createDate, memberNo) );
+				String memberId = rs.getString("MEMBER_ID");
+				int readCount = rs.getInt("READ_COUNT");
+				int commentCount = rs.getInt("COMMENT_COUNT");
+				
+				list.add( new Board(boardNo, boardTitle, boardContent, createDate, memberId, readCount, commentCount) );
 
 			}
 		}finally {
@@ -94,9 +96,11 @@ public class BoardDAO {
 				String boardTitle = rs.getString("BOARD_TITLE");
 				String boardContent = rs.getString("BOARD_CONTENT");
 				String createDate = rs.getString("CREATE_DT");
-				int memberNo = rs.getInt("MEMBER_NO");
-
-				list.add( new Board(boardNo, boardTitle, boardContent, createDate, memberNo) );
+				String memberId = rs.getString("MEMBER_ID");
+				int readCount = rs.getInt("READ_COUNT");
+				int commentCount = rs.getInt("COMMENT_COUNT");
+				
+				list.add( new Board(boardNo, boardTitle, boardContent, createDate, memberId, readCount, commentCount) );
 
 			}
 			
@@ -107,9 +111,6 @@ public class BoardDAO {
 
 		return list;
 	}
-
-
-
 
 	/** 게시글 작성 DAO
 	 * @param conn 
@@ -140,9 +141,6 @@ public class BoardDAO {
 		
 		return result;
 	}
-
-
-
 	
 	/** 본인 게시글 조회 DAO
 	 * @param conn
@@ -168,9 +166,11 @@ public class BoardDAO {
 				String boardTitle = rs.getString("BOARD_TITLE");
 				String boardContent = rs.getString("BOARD_CONTENT");
 				String createDate = rs.getString("CREATE_DT");
-				int memberNo = rs.getInt("MEMBER_NO");
-
-				list.add( new Board(boardNo, boardTitle, boardContent, createDate, memberNo) );
+				String memberId = rs.getString("MEMBER_ID");
+				int readCount = rs.getInt("READ_COUNT");
+				int commentCount = rs.getInt("COMMENT_COUNT");
+				
+				list.add( new Board(boardNo, boardTitle, boardContent, createDate, memberId, readCount, commentCount) );
 
 			}
 			
@@ -210,9 +210,6 @@ public class BoardDAO {
 		}
 		return result;
 	}
-
-
-
 	
 	/** 게시글 삭제 DAO
 	 * @param conn
@@ -237,6 +234,105 @@ public class BoardDAO {
 		}
 		return result;
 	}
+	
+	/** 게시글 삭제 2
+	 * @param conn
+	 * @param boardNum
+	 * @return
+	 */
+	public int deleteBoard2(Connection conn, int boardNum) throws Exception{
+		int result = 0;
+		
+		try {
+			
+			String sql = prop.getProperty("deleteBoard2");
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+			
+			result = pstmt.executeUpdate();
+			
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+
+
+	
+	/** 게시글 호출 DAO
+	 * @param conn
+	 * @param boardNum
+	 * @return
+	 */
+	public Board selectSpecificBoard(Connection conn, int boardNum) throws Exception {
+		Board board = null;
+		
+		try {
+			
+			String sql = prop.getProperty("selectSpecificBoard");
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+			
+			rs = pstmt.executeQuery();
+					
+			if(rs.next()) {
+				int boardNo = rs.getInt("BOARD_NO");
+				String boardTitle = rs.getString("BOARD_TITLE");
+				String boardContent = rs.getString("BOARD_CONTENT");
+				String createDate = rs.getString("CREATE_DT");
+				String memberId = rs.getString("MEMBER_ID");
+				int readCount = rs.getInt("READ_COUNT");
+				
+				board = new Board();
+				board.setBoardNo(boardNo);
+				board.setBoardTitle(boardTitle);
+				board.setBoardContent(boardContent);
+				board.setCreateDate(createDate);
+				board.setMemberId(memberId);
+				board.setReadCount(readCount);
+			}
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return board;
+	}
+
+
+
+	
+	/** 조회수 증가 DAO
+	 * @param conn
+	 * @param memNum
+	 * @return
+	 */
+	public int addReadCount(Connection conn, int boardNum) throws Exception {
+		int result = 0;
+		
+		try {
+
+			String sql = prop.getProperty("addReadCount");
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, boardNum);
+
+			result = pstmt.executeUpdate();
+					
+		}finally {
+			close(rs);
+			close(stmt);			
+		}
+		return result;
+	}
+	
+	
 	
 
 

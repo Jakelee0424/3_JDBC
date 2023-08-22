@@ -25,7 +25,7 @@ public class CommentService {
 		
 		list = dao.selectMyComment(conn, memNo);
 		
-		close(conn);		
+		close(conn);	
 		
 		return list;
 	}
@@ -62,6 +62,79 @@ public class CommentService {
 		
 		return list;
 	}
+
+	
+	/** 댓글 작성 서비스
+	 * @param boardNum
+	 * @param commentContent 
+	 * @param boardNum2 
+	 * @return
+	 */
+	public int insertComment(int memNo, int boardNum, String commentContent) throws Exception{
+		int result = 0;
+		
+		Connection conn = getConnection();
+		
+		result = dao.insertService(conn, memNo, boardNum, commentContent);
+		
+		if(result > 0 ) {
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		
+		return result;
+	}
+
+	
+	/** 댓글 수정 서비스
+	 * @param comNum
+	 * @param updateComment
+	 * @return
+	 */
+	public int updateComment(int comNum, String updateComment) throws Exception {
+		int result = 0;
+		
+		Connection conn = getConnection();
+		
+		result = dao.updateComment(conn, comNum, updateComment);
+		
+		if(result > 0) {
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		
+		return result;
+	}
+
+	/** 댓글 삭제 서비스
+	 * @param comNum
+	 * @return
+	 */
+	public int deleteComment(int comNum) throws Exception {
+		
+		int result = 0;
+		
+		Connection conn = getConnection();
+		
+		result = dao.deleteComment(conn, comNum);
+		
+		if(result > 0) {
+			commit(conn);
+		} else {
+			rollback(conn);
+		}
+		
+		close(conn);
+		
+		return result;
+	}
+	
 	
 	
 	

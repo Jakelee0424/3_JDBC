@@ -27,10 +27,10 @@ public class BoardView {
 				System.out.println("|                      게시판 관리                       |");
 				System.out.println("---------------------------------------------------------");
 				System.out.println("1. 게시글 조회");
-				System.out.println("2. 게시글 작성");
-				System.out.println("3. 게시글 수정");
-				System.out.println("4. 게시글 삭제");
-//				System.out.println("5. 게시글 별 댓글 조회");
+				System.out.println("2. 게시글 상세 조회");
+				System.out.println("3. 게시글 작성");
+				System.out.println("4. 게시글 수정");
+				System.out.println("5. 게시글 삭제");
 				System.out.println();
 				System.out.println("9. 이전 메뉴");
 				System.out.println("0. 프로그램 종료");
@@ -43,13 +43,10 @@ public class BoardView {
 				
 				switch(input) {
 				case 1: selectBoard();   break;
-				case 2: insertBoard();  break;
-				case 3: updateBoard();   break;
-				case 4: deleteBoard();   break;
-//				case 5: deleteEmployee();   break;
-//				case 6: selectDept();   break;
-//				case 7: selectSalary();   break;
-//				case 8: selectDeptTotalSalary();   break;
+				case 2: selectSpecificBoard();   break;
+				case 3: insertBoard();  break;
+				case 4: updateBoard();   break;
+				case 5: deleteBoard();   break;
 				case 9: return; 
 				case 0: System.out.println("프로그램을 종료합니다...");   
 						System.exit(0); // JVM 강제 종료 구문
@@ -73,7 +70,9 @@ public class BoardView {
 	
 
 
-	/** 게시글 전체 조회
+
+
+	/** 게시글 조회
 	 * @throws Exception
 	 */
 	private void selectBoard() throws Exception {
@@ -82,9 +81,9 @@ public class BoardView {
 		int memNo = Session.loginMember.getMemberNo();
 		
 		System.out.println("----------------------- [게시글 조회] -----------------------");
-		System.out.println("1. 전체 게시글 조회");
-		System.out.println("2. 작성자별 게시글 조회");
-		System.out.println("3. 내가 쓴 게시글 조회");
+		System.out.println("1. 전체 게시글 목록");
+		System.out.println("2. 작성자별 게시글 목록");
+		System.out.println("3. 내가 쓴 게시글 목록");
 		System.out.println();
 		System.out.print("번호 입력 >> ");
 		int selectNum = sc.nextInt();
@@ -106,11 +105,32 @@ public class BoardView {
 		default : System.out.println("잘못 입력하셨습니다.");
 		}
 		
-		
-		
 	}
 
-
+	/** 게시글 상세 조회
+	 * 
+	 */
+	private void selectSpecificBoard() throws Exception {
+		// 게시글 번호 입력받아
+		// 해당 게시글 출력
+		// 해당 게시글 조회수 증가(내가 쓴 글은 조회수 증가 X)
+		
+		Board board = null;
+		int memNum = Session.loginMember.getMemberNo();
+		
+		System.out.println("조회하실 게시글의 번호를 입력하세요");
+		System.out.print("번호 입력 >> ");
+		int boardNum = sc.nextInt();
+		
+		board = service.selectSpecificBoard(memNum, boardNum);
+				
+		printOne(board);
+		
+		// 로그인한 회원이 작성한 게시물이면
+		// 게시글에 수정/삭제 기능 노출
+		
+	}
+	
 	/** 게시글 작성
 	 * 
 	 */
@@ -123,10 +143,20 @@ public class BoardView {
 		System.out.print("게시글 제목 : ");
 		String title = sc.nextLine();
 		
-		System.out.println("게시글 내용 작성 :");
-		String content = sc.nextLine();
+		System.out.print(" [ 게시글 내용 작성(!wq 작성시 종료) ]\n => ");
+		StringBuffer sb = new StringBuffer();
 		
-		result = service.insertBoard(title, content, idNum);
+		while(true) {
+			String content = sc.nextLine();
+			
+			if(content.equals("!wq")) break;
+			
+			sb.append(content);
+			sb.append("\n");
+		}
+		
+		
+		result = service.insertBoard(title, sb.toString(), idNum);
 		
 		if (result > 0) {
 			System.out.println("게시글 작성이 완료되었습니다.");
@@ -176,11 +206,8 @@ public class BoardView {
 			
 		}
 		
-		
-		
-		
 	}
-
+	
 
 	/**
 	 * 게시글 삭제
@@ -200,7 +227,6 @@ public class BoardView {
 		System.out.println("삭제를 원하는 글의 번호를 입력하세요");
 		System.out.print("번호 입력(뒤로가기 0번) >>");
 		int boardNum = sc.nextInt();
-		sc.nextLine();
 		
 		if(boardNum == 0) {
 			return;			
@@ -211,7 +237,7 @@ public class BoardView {
 			int doubleCheckNum = sc.nextInt();
 			
 			if (checkNum == doubleCheckNum) {
-				result = service.deleteBoard(boardNum);
+				result = service.deleteBoard2(boardNum);
 				
 				if(result>0) {
 					System.out.println("게시글 삭제가 완료되었습니다.");
@@ -233,23 +259,22 @@ public class BoardView {
 	 */
 	public void printAll(List<Board> borList) {
 
-
 		if(borList.isEmpty()) {
 			System.out.println("조회된 게시글 정보가 없습니다.");
 
 		} else {
-			System.out.println("\n\n 글 번호 |        글 제목        |            글 내용            |        작성일       |  작성자   " );
-			System.out.println("---------------------------------------------------------------------------------------------------------");
+			System.out.println("\n\n 글 번호 |        글 제목        |        작성일       |  작성자  |  조회수2 | " );
+			System.out.println("---------------------------------------------------------------------------------");
 
 			for(Board bor : borList) { 
-				System.out.printf(" %6d  | %-10s\t | %-15s\t | %10s | %3s \n\n",
-						bor.getBoardNo(),bor.getBoardTitle(),bor.getBoardContent(),bor.getCreateDate(),bor.getMemberNo());
+				System.out.printf(" %6d  | %s [%d] \t | %10s |  %-3s  |    %s    | \n\n",
+				bor.getBoardNo(),bor.getBoardTitle(),bor.getCommentCount(),bor.getCreateDate(),bor.getMemberId(),bor.getReadCount());
 			}
 		}	
 		return;
 	}
 
-	/** 전달받은 게시글 한 개 출력
+	/** 전달받은 게시물 상세 페이지 출력
 	 * @param mem
 	 */
 	public void printOne(Board bor) {
@@ -258,11 +283,15 @@ public class BoardView {
 			System.out.println("조회된 게시글 정보가 없습니다.");
 
 		} else {
-			System.out.println("\n\n 글 번호 |     글 제목     |          글 내용          |        작성일       |  작성자   " );
-			System.out.println("--------------------------------------------------------------------------------------");
+			System.out.println("\n\n 글 번호 |     글 제목     |        작성일        |    작성자  " );
+			System.out.println("-------------------------------------------------------------------");
 
-			System.out.printf(" %6d  | %11s | %15s | %8s | %3s \n\n",
-					bor.getBoardNo(),bor.getBoardTitle(),bor.getBoardContent(),bor.getCreateDate(),bor.getMemberNo());
+			System.out.printf(" %6d  | %11s |  %8s | %-3s \n\n",
+					bor.getBoardNo(),bor.getBoardTitle(),bor.getCreateDate(),bor.getMemberId());
+			System.out.println("--------------------------------------------------------------------\n");
+			System.out.println(bor.getBoardContent());
+			System.out.println("\n--------------------------------------------------------------------\n\n");
+			
 		}
 
 	}

@@ -94,22 +94,20 @@ public class MainView {
 	 */
 	private void login() throws Exception {
 		System.out.println("\n----------------------- [로그인] -----------------------");
-		
-		Member member = new Member();
-		
-		System.out.print("아이디 : ");
-		String id = sc.nextLine();
-		
-		System.out.print("비밀번호 : ");
-		String pw = sc.nextLine();
-		
-		member = service.checkYN(id, pw);
-		
-		if(member.getUnregisterFlag().equals("Y")) {
-			System.out.println("\n [ 탈퇴한 회원입니다 ] \n");
-		}else {
+		try {
+			Member member = new Member();
 
-			try {
+			System.out.print("아이디 : ");
+			String id = sc.nextLine();
+
+			System.out.print("비밀번호 : ");
+			String pw = sc.nextLine();
+
+			member = service.checkYN(id, pw);
+
+			if(member.getUnregisterFlag().equals("Y")) {
+				System.out.println("\n [ 탈퇴한 회원입니다 ] \n");
+			}else {
 
 				// 로그인 서비스 호출 후 결과 반환 -> 세션에 저장
 				Session.loginMember = service.login(id, pw);
@@ -120,12 +118,12 @@ public class MainView {
 					System.out.printf("\n----------------[ %s 님 환영합니다 ]-----------------\n", Session.loginMember.getMemName());
 				}
 
-			}catch(Exception e) {
-				System.out.println("[ 로그인 중 예외 발생 ]");
 			}
+		}catch(Exception e) {
+			System.out.println("[ 로그인 중 예외 발생 ]");
 		}
 	}
-	
+
 	/**
 	 * 회원가입
 	 */

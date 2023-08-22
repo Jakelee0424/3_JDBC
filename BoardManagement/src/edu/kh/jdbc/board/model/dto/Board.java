@@ -10,6 +10,10 @@ public class Board {
 	private String deleteFlag;
 	private int memberNo;
 	
+	private String memberName;
+	private String memberId;
+	private int commentCount;
+	
 	public Board() {}
 
 	public Board(int boardNo, String boardTitle, String boardContent, String createDate, int readCount,
@@ -23,6 +27,18 @@ public class Board {
 		this.deleteFlag = deleteFlag;
 		this.memberNo = memberNo;
 	}
+	
+
+	public Board(int boardNo, String boardTitle, String boardContent, String createDate, String memberId,
+			int commentCount) {
+		super();
+		this.boardNo = boardNo;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.createDate = createDate;
+		this.memberId = memberId;
+		this.commentCount = commentCount;
+	}
 
 	public Board(int boardNo, String boardTitle, String boardContent, String createDate, int memberNo) {
 		super();
@@ -31,6 +47,20 @@ public class Board {
 		this.boardContent = boardContent;
 		this.createDate = createDate;
 		this.memberNo = memberNo;
+	}
+
+	
+
+	public Board(int boardNo, String boardTitle, String boardContent, String createDate,  String memberId, int readCount,
+			int commentCount) {
+		super();
+		this.boardNo = boardNo;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		this.createDate = createDate;
+		this.readCount = readCount;
+		this.memberId = memberId;
+		this.commentCount = commentCount;
 	}
 
 	public int getBoardNo() {
@@ -75,8 +105,25 @@ public class Board {
 	public void setMemberNo(int memberNo) {
 		this.memberNo = memberNo;
 	}
+	public String getMemberName() {
+		return memberName;
+	}
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+	public String getMemberId() {
+		return memberId;
+	}
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
+	public int getCommentCount() {
+		return commentCount;
+	}
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
 
-	
 	@Override
 	public String toString() {
 		return "Board [boardNo=" + boardNo + ", boardTitle=" + boardTitle + ", boardContent=" + boardContent

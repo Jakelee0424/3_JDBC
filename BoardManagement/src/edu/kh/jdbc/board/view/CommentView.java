@@ -10,6 +10,9 @@ import edu.kh.jdbc.board.model.service.BoardService;
 import edu.kh.jdbc.board.model.service.CommentService;
 import edu.kh.jdbc.common.Session;
 
+/**
+ * 
+ */
 public class CommentView {
 	
 	private Scanner sc = new Scanner(System.in);
@@ -44,9 +47,9 @@ public class CommentView {
 
 				switch(input) {
 				case 1: selectComment(); break;
-//				case 2: updateInfo(); break;
-//				case 3: selectAllInfo(); break;
-//				case 4: updatePw(); break;
+				case 2: insertComment(); break;
+				case 3: updateComment(); break;
+				case 4: deleteComment(); break;
 //				case 5: deleteInfo(); break;
 				case 9: return; 
 				case 0: System.out.println("\n---------------- 프로그램을 종료합니다 -----------------\n"); break;
@@ -62,7 +65,8 @@ public class CommentView {
 		}while(input != 0);
 	}
 
-	/** 게시글 별 댓글 조회
+
+	/** 댓글 조회
 	 * 
 	 */
 	private void selectComment() throws Exception{
@@ -78,14 +82,14 @@ public class CommentView {
 		
 		switch(selectComment){
 			
-		case 1: 
+		case 1: // 내가 쓴 댓글
 			
 			int memNo = Session.loginMember.getMemberNo();
 			
 			list = commentService.selcetMyComment(memNo);
 			
 			printAllCom(list);
-			
+
 			break;
 		
 		case 2:
@@ -120,6 +124,147 @@ public class CommentView {
 		default : System.out.println("번호를 잘못 입력하셨습니다.");
 		}		
 	}
+
+	/** 댓글 작성
+	 * 
+	 */
+	private void insertComment() throws Exception{
+		
+		System.out.println("----------------------- [ 댓글 작성 ] -----------------------");
+		int result = 0;
+		int memNo = Session.loginMember.getMemberNo();
+		
+		List<Board> borlist = new ArrayList<Board>();
+
+		borlist = boardService.selectBoard();
+		printAllBor(borlist);
+		
+		System.out.println("댓글 작성을 원하는 게시글 번호를 입력하세요");
+		System.out.print("번호 입력 >> ");
+		int boardNum = sc.nextInt();
+		sc.nextLine();
+		
+		boolean borCheck = true;
+		
+		for(int i = 0 ; i <borlist.size() ; i++){
+			if(boardNum == borlist.get(i).getBoardNo()) {
+				System.out.print("댓글 입력 >> ");
+				String commentContent = sc.nextLine();
+				
+				result = commentService.insertComment(memNo, boardNum, commentContent);
+				
+				if(result > 0 ) {
+					System.out.println("댓글이 작성되었습니다");
+					borCheck = false;
+					break;
+				} else {
+					System.out.println("댓글 작성에 실패했습니다");
+					borCheck = false;
+					break;
+				}
+			}
+		}
+		
+		if(borCheck) {
+			System.out.println("해당 번호의 게시글은 존재하지 않습니다.");
+				
+		}
+		
+	}
+
+	/** 댓글 수정
+	 * 
+	 */
+	private void updateComment() throws Exception{
+		System.out.println("----------------------- [ 댓글 수정 ] -----------------------\n");
+
+		List<Comment> list = new ArrayList<Comment>();
+
+		int memNo = Session.loginMember.getMemberNo();
+
+		list = commentService.selcetMyComment(memNo);
+
+		System.out.println("------------------- [ 작성자 댓글 목록 ] --------------------");
+		printAllCom(list);
+
+		boolean comCheck = true;
+		int result = 0;
+
+		System.out.println("수정을 원하는 댓글 번호를 입력하세요");
+		System.out.print("번호 입력 >> ");
+		int comNum = sc.nextInt();
+		sc.nextLine();
+
+		for(int i = 0 ; i <list.size() ; i++){
+			if(comNum == list.get(i).getCommentNo()) {
+				System.out.println("수정할 댓글 내용을 입력하세요 >>");
+				String updateComment = sc.nextLine();
+
+				result = commentService.updateComment(comNum, updateComment);
+
+				if(result > 0 ) {
+					System.out.println("댓글이 수정되었습니다");
+					comCheck = false;
+					break;
+				} else {
+					System.out.println("댓글 수정에 실패했습니다");
+					comCheck = false;
+					break;
+				}
+			}
+
+		}
+		
+		if(comCheck) {
+			System.out.println("해당 번호의 댓글은 존재하지 않습니다.");
+		}
+		
+}
+	
+	/** 댓글 삭제
+	 * 
+	 */
+	private void deleteComment() throws Exception{
+		System.out.println("----------------------- [ 댓글 삭제 ] -----------------------\n");
+
+		List<Comment> list = new ArrayList<Comment>();
+
+		int memNo = Session.loginMember.getMemberNo();
+		int result = 0;
+		boolean comCheck = false;
+		
+		list = commentService.selcetMyComment(memNo);
+
+		System.out.println("------------------- [ 작성자 댓글 목록 ] --------------------");
+		printAllCom(list);
+
+		System.out.println("삭제를 원하는 댓글 번호를 입력하세요");
+		System.out.print("번호 입력 >> ");
+		int comNum = sc.nextInt();
+		sc.nextLine();
+
+		for(int i = 0 ; i <list.size() ; i++){
+			if(comNum == list.get(i).getCommentNo()) {
+
+				System.out.print("진짜 삭제하시겠습니까? [Y/N]  >> ");
+				char yesOrNo = sc.next().toUpperCase().charAt(0);
+
+				if(yesOrNo == 'Y') {
+					result = commentService.deleteComment(comNum);
+
+					if(result > 0) {
+						System.out.println("삭제가 완료되었습니다.");
+					}else {
+						System.out.println("댓글 삭제에 실패했습니다.");
+					}
+
+				}
+			}
+		}
+		if(comCheck) {
+			System.out.println("해당 번호의 댓글은 존재하지 않습니다.");
+		}
+	}
 	
 	
 	// 보조 메서드
@@ -145,7 +290,7 @@ public class CommentView {
 		return;
 	}
 
-	/** 전달받은 멤버 한명 출력
+	/** 전달받은 게시글 한개 출력
 	 * @param mem
 	 */
 	public void printOneBor(Board bor) {
@@ -177,14 +322,14 @@ public class CommentView {
 			System.out.println("--------------------------------------------------------------------------------------");
 			
 			for(Comment com : comList) { 
-				System.out.printf(" %8d  | %-20s\t | %15s | %3d \n\n",
-						com.getCommentNo(),com.getCommentContent(),com.getCreateDate(),com.getMemberNo());
+				System.out.printf(" %8d  | %-15s\t | %15s | %-10s \n\n",
+						com.getCommentNo(),com.getCommentContent(),com.getCreateDate(),com.getMemberId());
 			}
 		}	
 		return;
 	}
 
-	/** 전달받은 멤버 한명 출력
+	/** 전달받은 댓글 한개 출력
 	 * @param mem
 	 */
 	public void printOneCom(Comment com) {
@@ -196,8 +341,8 @@ public class CommentView {
 			System.out.println("\n\n 댓글 번호 |     댓글 내용     |        작성일       |  작성자   " );
 			System.out.println("--------------------------------------------------------------------------------------");
 
-			System.out.printf(" %7d  | %11s | %15s | %8s | %3s \n\n",
-					com.getCommentNo(),com.getCommentContent(),com.getCreateDate(),com.getMemberNo());
+			System.out.printf(" %7d  | %11s | %15s | %8s | %-10s \n\n",
+					com.getCommentNo(),com.getCommentContent(),com.getCreateDate(),com.getMemberId());
 		}
 
 	}

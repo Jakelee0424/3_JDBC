@@ -28,7 +28,6 @@ public class Member {
 		this.memName = memName;
 		this.memberGender = memberGender;
 	}
-
 	
 	
 

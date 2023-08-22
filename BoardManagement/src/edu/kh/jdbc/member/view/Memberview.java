@@ -48,7 +48,7 @@ public class Memberview {
 				case 2: updateInfo(); break;
 				case 3: selectAllInfo(); break;
 				case 4: updatePw(); break;
-				case 5: deleteInfo(); break;
+				case 5: if(deleteInfo()) return; break;
 				case 9: return; 
 				case 0: System.out.println("\n---------------- 프로그램을 종료합니다 -----------------\n"); break;
 				default: System.out.println("\n메뉴에 존재하는 번호만 입력하세요.\n");
@@ -167,7 +167,6 @@ public class Memberview {
 			System.out.println("보안문자 [ " + randomNum + " ]");
 			System.out.print("보안 문자 입력 >> ");
 			int numCheck = sc.nextInt();
-		
 			sc.nextLine();
 			
 			if(numCheck == randomNum) {
@@ -199,7 +198,7 @@ public class Memberview {
 	/**
 	 * 회원 탈퇴
 	 */
-	private void deleteInfo() throws Exception {
+	private boolean deleteInfo() throws Exception {
 		
 		System.out.println("\n----------------[ 회원 탈퇴 ]-----------------\n");
 		Member member = new Member();		
@@ -231,15 +230,18 @@ public class Memberview {
 				
 				if (yesOrNo == 'Y') {
 					result = service.deleteInfo(memNo);
+					Session.loginMember = null;
+					return true;
 				} else {
 					System.out.println("회원 탈퇴를 종료합니다");
 				}
 
 			}else {
 				System.out.println("보안문자를 잘못 입력하셨습니다.");
+				
 			}
 		}
-		
+		return false;
 	}
 
 // 보조메서드

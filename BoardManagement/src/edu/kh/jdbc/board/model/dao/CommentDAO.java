@@ -40,6 +40,7 @@ public class CommentDAO {
 	 * @return
 	 */
 	public List<Comment> selectMyComment(Connection conn, int memNo) throws Exception{
+		
 		List<Comment> list = new ArrayList<Comment>();
 		
 		try {
@@ -56,11 +57,10 @@ public class CommentDAO {
 				int commentNo = rs.getInt("COMMENT_NO"); 
 				String commentContent = rs.getString("COMMENT_CONTENT");
 				String createDate = rs.getString("CREATE_DT");
-				int memberNo = rs.getInt("MEMBER_NO");
+				String memberId = rs.getString("MEMBER_ID");
 				
-				list.add( new Comment(commentNo, commentContent, createDate, memberNo) );
+				list.add( new Comment(commentNo, commentContent, createDate, memberId) );
 			}
-			
 		}finally {
 			close(rs);
 			close(pstmt);
@@ -92,9 +92,9 @@ public class CommentDAO {
 				int commentNo = rs.getInt("COMMENT_NO"); 
 				String commentContent = rs.getString("COMMENT_CONTENT");
 				String createDate = rs.getString("CREATE_DT");
-				int memberNo = rs.getInt("MEMBER_NO");
+				String memberId = rs.getString("MEMBER_ID");
 				
-				list.add( new Comment(commentNo, commentContent, createDate, memberNo) );
+				list.add( new Comment(commentNo, commentContent, createDate, memberId) );
 			}
 			
 		}finally {
@@ -127,9 +127,9 @@ public class CommentDAO {
 				int commentNo = rs.getInt("COMMENT_NO"); 
 				String commentContent = rs.getString("COMMENT_CONTENT");
 				String createDate = rs.getString("CREATE_DT");
-				int memberNo = rs.getInt("MEMBER_NO");
+				String memberId = rs.getString("MEMBER_ID");
 				
-				list.add( new Comment(commentNo, commentContent, createDate, memberNo) );
+				list.add( new Comment(commentNo, commentContent, createDate, memberId) );
 			}
 			
 		}finally {
@@ -137,6 +137,94 @@ public class CommentDAO {
 			close(pstmt);
 		}
 		return list;
+	}
+
+
+
+	
+	
+	/** 댓글 달기 DAO
+	 * @param conn
+	 * @param boardNum
+	 * @param commentContent 
+	 * @param boardNum 
+	 * @return
+	 */
+	public int insertService(Connection conn, int memNo, int boardNum, String commentContent) throws Exception{
+		int result = 0;
+		
+		try {
+			
+			String sql = prop.getProperty("insertComment");
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, commentContent);
+			pstmt.setInt(2, memNo);
+			pstmt.setInt(3, boardNum);
+			
+			result = pstmt.executeUpdate();			
+			
+		}finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+
+	/** 댓글 수정 DAO
+	 * @param conn
+	 * @param comNum
+	 * @param updateComment
+	 * @return
+	 */
+	public int updateComment(Connection conn, int comNum, String updateComment) throws Exception{
+		int result = 0;
+		
+		try {
+			
+			String sql = prop.getProperty("updateComment");
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, updateComment);
+			pstmt.setInt(2, comNum);
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
+	}
+
+
+	/** 댓글 삭제 DAO
+	 * @param conn
+	 * @param comNum
+	 * @return
+	 */
+	public int deleteComment(Connection conn, int comNum) throws Exception{
+		int result = 0;
+		
+		try {
+			
+			String sql = prop.getProperty("deleteComment");
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, comNum);
+			
+			result = pstmt.executeUpdate();
+			
+		} finally {
+			close(pstmt);
+		}
+		
+		return result;
 	}
 	
 	

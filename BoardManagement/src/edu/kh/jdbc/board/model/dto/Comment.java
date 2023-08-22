@@ -8,8 +8,22 @@ public class Comment {
 	private String deleteFlag;
 	private int memberNo;
 	
+	private String memberName;
+	private String memberId;
+	
 	public Comment() {}
 	
+	
+	
+	public Comment(int commentNo, String commentContent, String createDate, String memberId) {
+		super();
+		this.commentNo = commentNo;
+		this.commentContent = commentContent;
+		this.createDate = createDate;
+		this.memberId = memberId;
+	}
+
+
 	public Comment(int commentNo, String commentContent, String createDate, String deleteFlag, int memberNo) {
 		super();
 		this.commentNo = commentNo;
@@ -58,12 +72,26 @@ public class Comment {
 	public void setMemberNo(int memberNo) {
 		this.memberNo = memberNo;
 	}
-
+	public String getMemberName() {
+		return memberName;
+	}
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+	public String getMemberId() {
+		return memberId;
+	}
+	public void setMemberId(String memberId) {
+		this.memberId = memberId;
+	}
+	
+	
 	
 	@Override
 	public String toString() {
-		return "Board [commentNo=" + commentNo + ", commentContent=" + commentContent + ", createDate=" + createDate
-				+ ", deleteFlag=" + deleteFlag + ", memberNo=" + memberNo + "]";
+		return "Comment [commentNo=" + commentNo + ", commentContent=" + commentContent + ", createDate=" + createDate
+				+ ", deleteFlag=" + deleteFlag + ", memberNo=" + memberNo + ", memberName=" + memberName + ", memberId="
+				+ memberId + "]";
 	}
 	
 	
